@@ -45,7 +45,7 @@
     
     <TextView 
         android:id="@+id/tvRssSource"
-        android:layout_width="140dp"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/ivRssIcon"
         android:layout_toRightOf="@+id/ivRssIcon"
@@ -53,20 +53,24 @@
         android:text=""
         android:textSize="12sp"
         android:singleLine="true"
-        android:textColor="@color/news_title"/>
+        android:textColor="@color/news_title"
+        android:ellipsize="marquee"/>
     
     <TextView 
         android:id="@+id/tvDate"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/ivIcon"
+        android:layout_toRightOf="@+id/tvRssSource"
         android:layout_alignParentRight="true"
+        android:layout_marginLeft="8dp"
         android:layout_marginRight="16dp"
         android:text=""
         android:textSize="14sp"
         android:singleLine="true"
         android:gravity="right"
-        android:textColor="@color/news_title"/>
+        android:textColor="@color/news_title"
+        android:ellipsize="marquee"/>
     
     <View
         android:layout_width="match_parent"

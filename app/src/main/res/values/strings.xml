@@ -15,4 +15,6 @@
     <string name="dialog_update_text2">Upgrading to version %1$s</string>
     <string name="update_skip">Skip</string>
 
+    <string name="bottom_back">Back</string>
+
 </resources>
