@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="momock">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/libs/momock.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

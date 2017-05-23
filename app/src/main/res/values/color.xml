@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="green">#00FA9A</color>
+    
+    <color name="sepLine">#7b7a7a</color>
+
+    <color name="colorPrimary">#ffff4131</color>
+    <color name="colorPrimaryDark">#ffff4131</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="splash_top_bg">#f33c2d</color>
+    <color name="splash_ft_title">#666666</color>
+    <color name="splash_ft_info">#999999</color>
+    <color name="splash_update">#999999</color>
+
+    <color name="news_title">#000000</color>
+
+    <color name="colorListCellDefault">#FFFFFFFF</color>
+    <color name="colorListCellFocus">#FFfed5d1</color>
+    <color name="tab_indicator_color">#ff84261e</color>
+    <color name="tab_bg_color">#eeeeee</color>
+    <color name="bg_red">#ffff4131</color>
+    <color name="bg_dark_red">#ffd73123</color>
+    <color name="bg_yellow">#ffffff00</color>
+    <color name="bg_black">#ff222222</color>
+    <color name="bg_grey">#ff999999</color>
+    <color name="bg_white">#ffffffff</color>
+    <color name="bg_blue">#29a6ff</color>
+    <color name="bg_transparent">#00000000</color>
+    <color name="bg_mask">#88000000</color>
+    <color name="bg_light_grey">#ffbbbbbb</color>
+
+    <color name="bg_lightmask">#22000000</color>
+</resources>

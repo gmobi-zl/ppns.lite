@@ -1,0 +1,98 @@
+apply plugin: 'com.android.application'
+
+
+ext {
+    /**
+     * project settings
+     */
+    PROJECT_NAME = 'PopoNews'
+    /**
+     * value define
+     */
+    VAL_STR_NULL = 'null'
+    VAL_DATE = new Date()
+    /**
+     * keys in build config
+     */
+    KEY_BUILD_TYPE_STRING = 'String'
+    KEY_BUILD_TYPE_BOOL = 'boolean'
+    KEY_BUILD_TYPE_DOUBLE = 'double'
+    KEY_BUILD_DATE = 'BUILD_DATE'
+    KEY_BUILD_URL = 'BASE_URL'
+    KEY_BUILD_GROUP = 'GROUP'
+    KEY_BUILD_IMAGE = 'IMAGE_SCALE'
+    KEY_BUILD_DCH = 'DISTRIBUTION_CHANNEL'
+}
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "25.0.0"
+
+    defaultConfig {
+        applicationId "com.poponews.lite"
+        minSdkVersion 15
+        targetSdkVersion 24
+
+        multiDexEnabled true
+
+        /**
+         * build config
+         */
+
+        buildConfigField KEY_BUILD_TYPE_STRING, KEY_BUILD_DATE, "\"${VAL_DATE}\""
+        buildConfigField KEY_BUILD_TYPE_DOUBLE, KEY_BUILD_IMAGE, '0.9'
+        buildConfigField KEY_BUILD_TYPE_STRING, KEY_BUILD_GROUP, '"poponews.global"'
+        buildConfigField KEY_BUILD_TYPE_STRING, KEY_BUILD_URL, '"http://api.lite.poponews.net"'
+        buildConfigField KEY_BUILD_TYPE_STRING, KEY_BUILD_DCH, '"poponews.lite"'
+    }
+
+    signingConfigs {
+        gmobiKey {
+            keyAlias 'gmobi'
+            keyPassword '4gmobi2admin'
+            storeFile file('../release.keystore')
+            storePassword '4gmobi2admin'
+        }
+    }
+
+    buildTypes {
+        release {
+            zipAlignEnabled true
+            minifyEnabled true
+            shrinkResources true
+            signingConfig signingConfigs.gmobiKey
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
+
+    useLibrary 'org.apache.http.legacy'
+
+    lintOptions {
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    //compile 'com.google.android.gms:play-services:9.4.0'
+    compile 'com.android.support:support-annotations:24.0.0'
+    compile 'com.android.support:recyclerview-v7:24.0.0'
+    compile 'com.android.support:support-v4:24.2.1'
+    compile 'com.android.support:design:24.2.1'
+    compile 'com.android.support:cardview-v7:24.2.1'
+    compile files('libs/momock.jar')
+    compile files('libs/mocean.lite_5.8.3.jar')
+    compile files('libs/javax.inject-1.jar')
+}
+
+
+//apply plugin: 'com.google.gms.google-services'
