@@ -31,5 +31,7 @@
     <color name="bg_mask">#88000000</color>
     <color name="bg_light_grey">#ffbbbbbb</color>
 
+    <color name="bg_tranblack">#80000000</color>
+
     <color name="bg_lightmask">#22000000</color>
 </resources>

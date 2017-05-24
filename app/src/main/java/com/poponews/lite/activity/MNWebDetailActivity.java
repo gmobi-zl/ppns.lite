@@ -1,7 +1,11 @@
 package com.poponews.lite.activity;
 
+import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.ConsoleMessage;
 import android.webkit.WebChromeClient;
@@ -11,14 +15,23 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
 import com.mocean.AdServiceManager;
+import com.mocean.IAd;
+import com.mocean.IAdItem;
 import com.mocean.IAdService;
+import com.mocean.ICallback;
 import com.mocean.IInterstitialAd;
+import com.mocean.INativeAd;
 import com.mocean.IServiceCallback;
+import com.momock.util.Logger;
+import com.poponews.lite.MonyNewsEvents;
 import com.poponews.lite.R;
 import com.poponews.lite.model.MNNews;
 import com.poponews.lite.services.MonyNewsService;
+import com.poponews.lite.ui.DetailAdView;
 
 import android.os.Bundle;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 public class MNWebDetailActivity extends AppCompatActivity {
 	
@@ -26,12 +39,43 @@ public class MNWebDetailActivity extends AppCompatActivity {
 	ProgressBar pbWebNewsLoad;
 	AppCompatActivity selfActivity;
 	boolean isShowAds = false;
+	IAdService adService;
+	INativeAd nAds;
+
+	Context mContex;
+	RelativeLayout adContainer;
+
+	TextView tvBottomLeft;
+	TextView tvBottomRight;
+
+	Handler adHandler = new Handler(){
+		@Override
+		public void handleMessage(Message msg) {
+			if (msg.what == 1001){
+				if (adService != null && nAds != null){
+					IAdItem item = nAds.getAdItem(0);
+					if (item != null){
+						DetailAdView adView = new DetailAdView(mContex);
+						adView.refresh(item);
+						RelativeLayout adViewLayout = adView.getViews();
+						adContainer.addView(adViewLayout);
+						adContainer.setVisibility(View.VISIBLE);
+
+						tvBottomLeft.setVisibility(View.VISIBLE);
+						tvBottomRight.setText(mContex.getResources().getText(R.string.bottom_close));
+					}
+				}
+			}
+		}
+	};
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mnweb_detail);
         selfActivity = this;
+		mContex = this;
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		String titleName = getResources().getString(R.string.app_title);
@@ -43,7 +87,11 @@ public class MNWebDetailActivity extends AppCompatActivity {
 				closePage();
 			}
 		});
-		
+
+		adContainer = (RelativeLayout)findViewById(R.id.rlAdContainer);
+		tvBottomLeft = (TextView)findViewById(R.id.tvBottomLeft);
+		tvBottomRight = (TextView)findViewById(R.id.tvBottomRight);
+
 		pbWebNewsLoad = (ProgressBar)findViewById(R.id.pbWebNewsLoad);
         
         MonyNewsService app = MonyNewsService.getInstance();
@@ -127,15 +175,34 @@ public class MNWebDetailActivity extends AppCompatActivity {
 //			});
 
 		if (isShowAds == false){
+//			AdServiceManager.get(this, new IServiceCallback<IAdService>(){
+//				@Override
+//				public void call(IAdService service) {
+//					IAdService adService = service;
+//					IInterstitialAd ad = adService.getInterstitialAd("i.litenews.detail");
+//					ad.popup();
+//				}
+//			});
+			isShowAds = true;
+
 			AdServiceManager.get(this, new IServiceCallback<IAdService>(){
 				@Override
 				public void call(IAdService service) {
-					IAdService adService = service;
-					IInterstitialAd ad = adService.getInterstitialAd("i.litenews.detail");
-					ad.popup();
+					Logger.debug("Detail Ads service callback");
+					adService = service;
+					nAds = adService.getNativeAd("detail.ad", 50, 50, 1, null);
+					nAds.setOnLoadLisenter(new ICallback() {
+						@Override
+						public void call(int resultCode) {
+							Logger.debug("Detail Ads get native ad callback = " + resultCode);
+							if (resultCode == IAd.OK){
+								adHandler.sendEmptyMessage(1001);
+							}
+						}
+					});
+					nAds.load();
 				}
 			});
-			isShowAds = true;
 		}
     }
     
@@ -145,10 +212,30 @@ public class MNWebDetailActivity extends AppCompatActivity {
     	//Appodeal.onResume(this, Appodeal.MREC);
 		//wvNewsReader.reload();
     }
-    
-    
-    
-    private void closePage(){
+
+    private void closeAdViews(){
+		tvBottomLeft.setVisibility(View.GONE);
+		adContainer.setVisibility(View.GONE);
+		tvBottomRight.setText(mContex.getResources().getText(R.string.bottom_back));
+	}
+
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		Logger.info("Activity onKeyUp keyCode = " + keyCode);
+		if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_MENU){
+			if (nAds != null){
+				IAdItem item = nAds.getAdItem(0);
+				if (item != null){
+					item.execute("go", null);
+					closeAdViews();
+				}
+			}
+		}
+
+		return super.onKeyUp(keyCode, event);
+	}
+
+	private void closePage(){
     	this.finish();
     }
     
@@ -159,6 +246,11 @@ public class MNWebDetailActivity extends AppCompatActivity {
     		wvNewsReader.goBack();
     		return;
     	}
+
+    	if (adContainer != null && adContainer.getVisibility() == View.VISIBLE){
+			closeAdViews();
+			return;
+		}
     	
     	super.onBackPressed();
     }
