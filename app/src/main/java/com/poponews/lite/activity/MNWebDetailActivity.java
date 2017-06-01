@@ -1,10 +1,12 @@
 package com.poponews.lite.activity;
 
+import android.app.Instrumentation;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.ConsoleMessage;
@@ -204,7 +206,37 @@ public class MNWebDetailActivity extends AppCompatActivity {
 				}
 			});
 		}
+
+		TextView tvBottomLeft = (TextView)findViewById(R.id.tvBottomLeft);
+		tvBottomLeft.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+
+			}
+		});
+
+		TextView tvBottomRight = (TextView)findViewById(R.id.tvBottomRight);
+		tvBottomRight.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				onTouchBack();
+			}
+		});
     }
+
+	public void onTouchBack(){
+		new Thread(){
+			public void run() {
+				try{
+					Instrumentation inst = new Instrumentation();
+					inst.sendKeyDownUpSync(KeyEvent.KEYCODE_BACK);
+				}
+				catch (Exception e) {
+					Log.e("Exception when onBack", e.toString());
+				}
+			}
+		}.start();
+	}
     
     @Override
     protected void onResume() {
