@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.momock.data.Settings;
+import com.momock.util.Logger;
 import com.poponews.lite.app.ConfigNames;
 import com.poponews.lite.services.MonyNewsService;
 
@@ -30,6 +31,11 @@ public class MonyNewsApp extends Application {
         if (appSetting == null)
             appSetting = new Settings(this, ConfigNames.SETTINGS_FILE_NAME);
         mContext = this;
+
+        Logger.setEnabled(true);
+        String appName = getPackageName();
+        Logger.open(this, appName, 5, Logger.LEVEL_DEBUG);
+
         MonyNewsService mnSvr = MonyNewsService.getInstance();
         mnSvr.start(this);
 

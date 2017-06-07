@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">维新闻</string>
+    <string name="app_title">维新闻</string>
+
+    <string name="splash_ver">版本号: %1$s</string>
+    <string name="splash_foot"> </string>
+
+    <string name="bottom_back">返回</string>
+    <string name="bottom_ok">确定</string>
+    <string name="bottom_cancel">取消</string>
+    <string name="bottom_close">关闭</string>
+</resources>

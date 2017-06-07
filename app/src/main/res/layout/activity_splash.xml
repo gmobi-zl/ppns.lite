@@ -81,7 +81,7 @@
             android:layout_above="@id/tv_splash_foot"
             android:layout_centerHorizontal="true"
             android:id="@+id/iv_net_loading"
-            android:layout_marginBottom="40dp"
+            android:layout_marginBottom="10dp"
             android:visibility="invisible"
 	  	 />
 

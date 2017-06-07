@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">PoPoNews</string>
+    <string name="app_name">Vie News</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-	<string name="app_title">POPONEWS</string>
+	<string name="app_title">Vie News</string>
 
     <string name="splash_ver">Version: %1$s</string>
     <string name="splash_foot"> </string>

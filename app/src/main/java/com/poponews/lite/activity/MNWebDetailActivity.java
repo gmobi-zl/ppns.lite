@@ -211,7 +211,7 @@ public class MNWebDetailActivity extends AppCompatActivity {
 		tvBottomLeft.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-
+				openAd();
 			}
 		});
 
@@ -251,20 +251,30 @@ public class MNWebDetailActivity extends AppCompatActivity {
 		tvBottomRight.setText(mContex.getResources().getText(R.string.bottom_back));
 	}
 
+	private void openAd(){
+		if (nAds != null){
+			IAdItem item = nAds.getAdItem(0);
+			if (item != null){
+				item.execute("go", null);
+				closeAdViews();
+			}
+		}
+	}
+
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		Logger.info("Activity onKeyUp keyCode = " + keyCode);
 		if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_MENU){
-			if (nAds != null){
-				IAdItem item = nAds.getAdItem(0);
-				if (item != null){
-					item.execute("go", null);
-					closeAdViews();
-				}
-			}
+			openAd();
 		}
 
 		return super.onKeyUp(keyCode, event);
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event){
+		Logger.info("Activity onKeyDown keyCode = " + keyCode);
+		return super.onKeyDown(keyCode, event);
 	}
 
 	private void closePage(){
