@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.mocean.IAd;
 import com.mocean.IAdItem;
 import com.poponews.lite.activity.MNWebDetailActivity;
-import com.poponews.lite.R;
+import com.vienews.global.R;
 import com.poponews.lite.model.MNCategory;
 import com.poponews.lite.model.MNNews;
 import com.poponews.lite.services.MonyNewsService;

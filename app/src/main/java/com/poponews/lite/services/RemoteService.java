@@ -7,7 +7,7 @@ import com.momock.http.HttpSession;
 import com.momock.service.IHttpService;
 import com.momock.util.Logger;
 import com.momock.util.SystemHelper;
-import com.poponews.lite.BuildConfig;
+import com.vienews.global.BuildConfig;
 import com.poponews.lite.util.PreferenceHelper;
 
 import org.apache.http.Header;
@@ -212,6 +212,9 @@ public class RemoteService {
             json.put("os_v", SystemHelper.getOsVersion());
             json.put("lang", Locale.getDefault().getLanguage());
             json.put("country", SystemHelper.getCountry(appContext));
+//            json.put("country", "cn");
+//            json.put("lang", "zh-cn");
+//            json.put("test", true);
             json.put("wmac", SystemHelper.getWifiMac(appContext));
             json.put("bmac", "");
             json.put("sn", SystemHelper.getAndroidId(appContext));

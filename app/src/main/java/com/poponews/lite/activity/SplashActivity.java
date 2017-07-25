@@ -21,7 +21,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.poponews.lite.R;
+import com.vienews.global.R;
 import com.momock.util.SystemHelper;
 import com.poponews.lite.app.MessageTopics;
 import com.poponews.lite.services.MonyNewsService;

@@ -6,6 +6,9 @@ package com.poponews.lite.ui;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+
+import com.momock.util.Logger;
+
 import java.util.List;
 
 public class FragmentAdapter extends FragmentStatePagerAdapter {
@@ -34,8 +37,12 @@ public class FragmentAdapter extends FragmentStatePagerAdapter {
     }
 
     public void refreshFragmentAtIndex(int pos){
-        ListFragment lFragment = mFragments.get(pos);
-        if (lFragment != null)
-            lFragment.refreshRecyclerView();
+        try {
+            ListFragment lFragment = mFragments.get(pos);
+            if (lFragment != null)
+                lFragment.refreshRecyclerView();
+        } catch(Exception e){
+            Logger.error(e);
+        }
     }
 }

@@ -5,7 +5,7 @@ ext {
     /**
      * project settings
      */
-    PROJECT_NAME = 'PopoNews'
+    PROJECT_NAME = 'Vie News'
     /**
      * value define
      */
@@ -29,7 +29,7 @@ android {
     buildToolsVersion "25.0.0"
 
     defaultConfig {
-        applicationId "com.poponews.lite"
+        applicationId "com.vienews.global"
         minSdkVersion 17
         targetSdkVersion 24
 
@@ -41,17 +41,24 @@ android {
 
         buildConfigField KEY_BUILD_TYPE_STRING, KEY_BUILD_DATE, "\"${VAL_DATE}\""
         buildConfigField KEY_BUILD_TYPE_DOUBLE, KEY_BUILD_IMAGE, '0.9'
-        buildConfigField KEY_BUILD_TYPE_STRING, KEY_BUILD_GROUP, '"poponews.global"'
+        buildConfigField KEY_BUILD_TYPE_STRING, KEY_BUILD_GROUP, '"vienews.global"'
         buildConfigField KEY_BUILD_TYPE_STRING, KEY_BUILD_URL, '"http://api.lite.poponews.net"'
-        buildConfigField KEY_BUILD_TYPE_STRING, KEY_BUILD_DCH, '"poponews.lite"'
+        buildConfigField KEY_BUILD_TYPE_STRING, KEY_BUILD_DCH, '"vienews.lite"'
     }
 
     signingConfigs {
-        gmobiKey {
-            keyAlias 'gmobi'
-            keyPassword '4gmobi2admin'
-            storeFile file('../release.keystore')
-            storePassword '4gmobi2admin'
+//        gmobiKey {
+//            keyAlias 'gmobi'
+//            keyPassword '4gmobi2admin'
+//            storeFile file('../release.keystore')
+//            storePassword '4gmobi2admin'
+//        }
+
+        vieKey {
+            keyAlias 'vieKey'
+            keyPassword 'viepassword'
+            storeFile file('../buildRelease.jks')
+            storePassword 'viepassword'
         }
     }
 
@@ -60,7 +67,7 @@ android {
             zipAlignEnabled true
             minifyEnabled true
             shrinkResources true
-            signingConfig signingConfigs.gmobiKey
+            signingConfig signingConfigs.vieKey
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -76,6 +83,23 @@ android {
         // but continue the build even when errors are found:
         abortOnError false
     }
+    /*
+    productFlavors {
+        global {
+            def appId = 'com.vienews.global'
+            applicationId appId
+            manifestPlaceholders = [APP_ID: "${appId}"]
+            signingConfig signingConfigs.gmobiKey
+        }
+
+        cn {
+            def appId = 'com.vienews.cn'
+            applicationId appId
+            manifestPlaceholders = [APP_ID: "${appId}"]
+            signingConfig signingConfigs.gmobiKey
+        }
+    }
+    */
 }
 
 repositories {

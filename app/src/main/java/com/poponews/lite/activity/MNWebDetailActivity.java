@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.ConsoleMessage;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -22,11 +23,13 @@ import com.mocean.IAdItem;
 import com.mocean.IAdService;
 import com.mocean.ICallback;
 import com.mocean.IInterstitialAd;
+import com.mocean.IMethod;
 import com.mocean.INativeAd;
 import com.mocean.IServiceCallback;
+import com.mocean.ServicesManager;
 import com.momock.util.Logger;
 import com.poponews.lite.MonyNewsEvents;
-import com.poponews.lite.R;
+import com.vienews.global.R;
 import com.poponews.lite.model.MNNews;
 import com.poponews.lite.services.MonyNewsService;
 import com.poponews.lite.ui.DetailAdView;
@@ -35,8 +38,14 @@ import android.os.Bundle;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.Map;
+
 public class MNWebDetailActivity extends AppCompatActivity {
-	
+
+	static final String EVENT_CLICK = "EVENT_CLICK";
+	static final String PARAM_PLACEMENT = "PARAM_PLACEMENT";
+	static final String PARAM_INDEX = "PARAM_INDEX";
+
 	WebView wvNewsReader;
 	ProgressBar pbWebNewsLoad;
 	AppCompatActivity selfActivity;
@@ -65,6 +74,11 @@ public class MNWebDetailActivity extends AppCompatActivity {
 
 						tvBottomLeft.setVisibility(View.VISIBLE);
 						tvBottomRight.setText(mContex.getResources().getText(R.string.bottom_close));
+
+						adContainer.setFocusable(true);
+						adContainer.setFocusableInTouchMode(true);
+						adContainer.requestFocus();
+						adContainer.requestFocusFromTouch();
 					}
 				}
 			}
@@ -186,13 +200,13 @@ public class MNWebDetailActivity extends AppCompatActivity {
 //				}
 //			});
 			isShowAds = true;
-
+			final String plm = "detail.ad";
 			AdServiceManager.get(this, new IServiceCallback<IAdService>(){
 				@Override
 				public void call(IAdService service) {
 					Logger.debug("Detail Ads service callback");
 					adService = service;
-					nAds = adService.getNativeAd("detail.ad", 50, 50, 1, null);
+					nAds = adService.getNativeAd(plm, 50, 50, 1, null);
 					nAds.setOnLoadLisenter(new ICallback() {
 						@Override
 						public void call(int resultCode) {
@@ -204,6 +218,18 @@ public class MNWebDetailActivity extends AppCompatActivity {
 					});
 					nAds.load();
 				}
+			});
+
+			ServicesManager.hook(EVENT_CLICK + "@" + plm, new IMethod(){
+				@Override
+				public Object run(Map<String, ?> params) {
+//					String plm = params.get(PARAM_PLACEMENT).toString();
+//					Integer index = (Integer)params.get(PARAM_INDEX);
+					Logger.info("EVENT_CLICK = " + plm + " / hook" );
+					closeAdViews();
+					return true;
+				}
+
 			});
 		}
 
@@ -219,7 +245,11 @@ public class MNWebDetailActivity extends AppCompatActivity {
 		tvBottomRight.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				onTouchBack();
+				if (adContainer != null && adContainer.getVisibility() == View.VISIBLE){
+					onTouchBack();
+				} else {
+					finish();
+				}
 			}
 		});
     }
@@ -245,18 +275,34 @@ public class MNWebDetailActivity extends AppCompatActivity {
 		//wvNewsReader.reload();
     }
 
+	private void closeKeyboard() {
+		View view = getWindow().peekDecorView();
+		if (view != null) {
+			InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+			inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+		}
+	}
+
     private void closeAdViews(){
 		tvBottomLeft.setVisibility(View.GONE);
 		adContainer.setVisibility(View.GONE);
 		tvBottomRight.setText(mContex.getResources().getText(R.string.bottom_back));
+
+		// for no touch phone
+		wvNewsReader.setFocusable(true);
+		wvNewsReader.setFocusableInTouchMode(true);
+		wvNewsReader.requestFocus();
+		wvNewsReader.requestFocusFromTouch();
+
+		//closeKeyboard();
 	}
 
 	private void openAd(){
 		if (nAds != null){
 			IAdItem item = nAds.getAdItem(0);
 			if (item != null){
-				item.execute("go", null);
 				closeAdViews();
+				item.execute("go", null);
 			}
 		}
 	}
@@ -265,7 +311,8 @@ public class MNWebDetailActivity extends AppCompatActivity {
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		Logger.info("Activity onKeyUp keyCode = " + keyCode);
 		if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_MENU){
-			openAd();
+			if (tvBottomLeft.getVisibility() == View.VISIBLE)
+                openAd();
 		}
 
 		return super.onKeyUp(keyCode, event);
@@ -283,13 +330,15 @@ public class MNWebDetailActivity extends AppCompatActivity {
     
     @Override
     public void onBackPressed() {
-    	
+		Logger.info("onBackPressed ~~~ !!!");
     	if (wvNewsReader != null && wvNewsReader.canGoBack()){
+			Logger.info("Web can go back!!!");
     		wvNewsReader.goBack();
     		return;
     	}
 
     	if (adContainer != null && adContainer.getVisibility() == View.VISIBLE){
+			Logger.info("AdView show!!!");
 			closeAdViews();
 			return;
 		}

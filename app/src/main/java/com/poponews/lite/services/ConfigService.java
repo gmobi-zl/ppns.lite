@@ -12,7 +12,7 @@ import com.momock.service.ISystemService;
 import com.momock.util.FileHelper;
 import com.momock.util.JsonHelper;
 import com.momock.util.Logger;
-import com.poponews.lite.BuildConfig;
+import com.vienews.global.BuildConfig;
 import com.poponews.lite.MonyNewsApp;
 import com.poponews.lite.app.CacheNames;
 import com.poponews.lite.app.ConfigNames;

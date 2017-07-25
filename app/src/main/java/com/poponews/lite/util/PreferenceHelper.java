@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.momock.data.Settings;
-import com.poponews.lite.BuildConfig;
+import com.vienews.global.BuildConfig;
 import com.poponews.lite.MonyNewsApp;
 import com.poponews.lite.app.ConfigNames;
 import com.poponews.lite.MonyNewsApp;

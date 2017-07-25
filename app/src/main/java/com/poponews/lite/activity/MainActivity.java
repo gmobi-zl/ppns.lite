@@ -12,7 +12,7 @@ import android.support.v7.widget.Toolbar;
 import com.momock.message.IMessageHandler;
 import com.momock.message.Message;
 import com.poponews.lite.MonyNewsEvents;
-import com.poponews.lite.R;
+import com.vienews.global.R;
 import com.poponews.lite.model.MNCategory;
 import com.poponews.lite.services.MonyNewsService;
 import com.poponews.lite.ui.FragmentAdapter;
